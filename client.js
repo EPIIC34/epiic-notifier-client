@@ -23,7 +23,18 @@ socket.on('notification', function(data){
         });
 
         git.pull('origin', 'master');
+    }
+    else if(data.message == 'cmd') {
+
         cmd.run('ls');
+        notifier.notify({
+            title   : data.title,
+            message : 'test cmd running',
+            icon    : path.join(__dirname, 'logo_epiic_white.png'), // Absolute path (doesn't work on balloons)
+            sound   : true, // Only Notification Center or Windows Toasters
+            wait    : false // Wait with callback, until user action is taken against notification
+        });
+
     }
     else {
 
