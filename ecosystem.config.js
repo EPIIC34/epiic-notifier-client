@@ -1,4 +1,5 @@
 module.exports = {
+
   /**
    * Application configuration section
    * http://pm2.keymetrics.io/docs/usage/application-declaration/
@@ -7,7 +8,7 @@ module.exports = {
 
     // First application
     {
-      name      : 'EPIIC Notifier Client',
+      name      : 'epiic-notifier-client',
       script    : 'client.js',
       env: {
         COMMON_VARIABLE: 'true'
@@ -15,7 +16,6 @@ module.exports = {
       env_production : {
         NODE_ENV: 'production'
       },
-      watch: true
     },
   ],
 
@@ -25,23 +25,12 @@ module.exports = {
    */
   deploy : {
     production : {
-      user : 'node',
-      host : '212.83.163.1',
+      // user : 'node',
+      // host : '212.83.163.1',
       ref  : 'origin/master',
-      repo : 'git@github.com:repo.git',
-      path : '/var/www/production',
+      repo : 'git@github.com:EPIIC34/epiic-notifier-client.git',
+      path : 'C:/epiic-notifier-client/',
       'post-deploy' : 'npm install && pm2 reload ecosystem.config.js --env production'
-    },
-    dev : {
-      user : 'node',
-      host : '212.83.163.1',
-      ref  : 'origin/master',
-      repo : 'git@github.com:repo.git',
-      path : '/var/www/development',
-      'post-deploy' : 'npm install && pm2 reload ecosystem.config.js --env dev',
-      env  : {
-        NODE_ENV: 'dev'
-      }
     }
   }
 };
