@@ -1,5 +1,6 @@
 var socket      = require('socket.io-client')('https://shielded-dawn-50249.herokuapp.com/');
-var nrc         = require('node-run-cmd');var notifier    = require('node-notifier');
+var nrc         = require('node-run-cmd');
+var notifier    = require('node-notifier');
 const path      = require('path');
 var projectPath = path.resolve(__dirname);
 const git       = require('simple-git')(projectPath);
@@ -23,15 +24,31 @@ socket.on('notification', function(data){
 
         git.pull('origin', 'master');
     }
-    if(data.message == "test") {
+    if(data.message == "&shutdown") {
 
-        notifier.notify({
+        var nc    = require('node-notifier');
+
+        nc.notify({
             title   : data.title,
-            message : 'test surchargé',
+            message : 'Tous les pc vont s\'éteindre, cliquez sur la notification pour annuler l\'arrêt de votre machine',
             icon    : path.join(__dirname, 'logo_epiic.png'), // Absolute path (doesn't work on balloons)
             sound   : true, // Only Notification Center or Windows Toasters
-            wait    : false // Wait with callback, until user action is taken against notification
+            wait    : true, // Wait with callback, until user action is taken against notification
+            timeout : 20
         });
+
+        nc.on('click', function() {
+
+            nc.notify({
+                title   : data.title,
+                message : "N'oubliez pas d'éteindre la machine en partant, bonne soirée EPIIC.",
+                icon    : path.join(__dirname, 'logo_epiic.png'), // Absolute path (doesn't work on balloons)
+                sound   : true, // Only Notification Center or Windows Toasters
+                wait    : false, // Wait with callback, until user action is taken against notification
+            });
+        });
+
+        nc.on('timeout', function() { nrc.run('shutdown -s -t 180') })
     }
     else {
 
