@@ -23,7 +23,7 @@ socket.on('notification', function(data){
         });
 
         git.pull('origin', 'master');
-        cmd.run('pm2 restart epiic-client-js');
+        cmd.run('pm2 restart epiic-client-notifier');
     }
     else {
 
