@@ -16,7 +16,7 @@ socket.on('notification', function(data){
         notifier.notify({
             title   : data.title,
             message : 'Lancement du procéssus de mise à jours automatique',
-            icon    : path.join(__dirname, 'logo_epiic.png'), // Absolute path (doesn't work on balloons)
+            icon    : path.join(__dirname, 'logo_epiic_white.png'), // Absolute path (doesn't work on balloons)
             sound   : true, // Only Notification Center or Windows Toasters
             wait    : false // Wait with callback, until user action is taken against notification
         });
