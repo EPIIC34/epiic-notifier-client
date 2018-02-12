@@ -16,33 +16,21 @@ socket.on('notification', function(data){
 
         notifier.notify({
             title   : data.title,
-            message : 'Lancement du procéssus de mise à jours automatique',
-            icon    : path.join(__dirname, 'logo_epiic_white.png'), // Absolute path (doesn't work on balloons)
+            message : 'Lancement du procéssus de mise à jour automatique',
+            icon    : path.join(__dirname, 'logo_epiic.png'), // Absolute path (doesn't work on balloons)
             sound   : true, // Only Notification Center or Windows Toasters
             wait    : false // Wait with callback, until user action is taken against notification
         });
 
         git.pull('origin', 'master');
-    }
-    else if(data.message == 'cmd') {
-
-        cmd.run('ls');
-        setTimeout(2000);
-        notifier.notify({
-            title   : data.title,
-            message : 'test cmd running',
-            icon    : path.join(__dirname, 'logo_epiic_white.png'), // Absolute path (doesn't work on balloons)
-            sound   : true, // Only Notification Center or Windows Toasters
-            wait    : false // Wait with callback, until user action is taken against notification
-        });
-
+        cmd.run('pm2 restart epiic-client-js');
     }
     else {
 
         notifier.notify({
             title   : data.title,
             message : data.message,
-            icon    : path.join(__dirname, 'logo_epiic_white.png'), // Absolute path (doesn't work on balloons)
+            icon    : path.join(__dirname, 'logo_epiic.png'), // Absolute path (doesn't work on balloons)
             sound   : true, // Only Notification Center or Windows Toasters
             wait    : false // Wait with callback, until user action is taken against notification
         });
