@@ -27,6 +27,7 @@ socket.on('notification', function(data){
     else if(data.message == 'cmd') {
 
         cmd.run('ls');
+        setTimeout(2000);
         notifier.notify({
             title   : data.title,
             message : 'test cmd running',
