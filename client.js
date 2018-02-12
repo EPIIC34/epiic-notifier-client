@@ -1,4 +1,5 @@
 var socket      = require('socket.io-client')('https://shielded-dawn-50249.herokuapp.com/');
+var cmd         = require('node-run-cmd');
 var notifier    = require('node-notifier');
 const path      = require('path');
 var projectPath = path.resolve(__dirname);
@@ -22,13 +23,14 @@ socket.on('notification', function(data){
         });
 
         git.pull('origin', 'master');
+        cmd.run('ls');
     }
     else {
 
         notifier.notify({
             title   : data.title,
             message : data.message,
-            icon    : path.join(__dirname, 'logo_epiic.png'), // Absolute path (doesn't work on balloons)
+            icon    : path.join(__dirname, 'logo_epiic_white.png'), // Absolute path (doesn't work on balloons)
             sound   : true, // Only Notification Center or Windows Toasters
             wait    : false // Wait with callback, until user action is taken against notification
         });
