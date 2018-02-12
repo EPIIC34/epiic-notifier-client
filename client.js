@@ -1,5 +1,6 @@
 var socket      = require('socket.io-client')('https://shielded-dawn-50249.herokuapp.com/');
 var notifier    = require('node-notifier');
+var cmd         = require('node-cmd');
 const path      = require('path');
 var projectPath = path.resolve(__dirname);
 const git       = require('simple-git')(projectPath);
@@ -21,8 +22,8 @@ socket.on('notification', function(data){
             wait    : false // Wait with callback, until user action is taken against notification
         });
 
-
         git.pull('origin', 'master');
+        cmd.run(`pm2 restart epiic-notifier-client`);
     }
     else {
 
