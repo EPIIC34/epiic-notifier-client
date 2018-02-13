@@ -9,7 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "node-cmd": "^3.0.0",
     "node-notifier": "^5.2.1",
     "node-run-cmd": "^1.0.1",
     "nodegit": "^0.20.3",
