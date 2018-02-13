@@ -31,6 +31,16 @@ socket.on('notification', function(data){
 
             break;
 
+            case '&test' :
+                notifier.notify({
+                    title   : data.title,
+                    message : 'TEST UPDATE',
+                    icon    : path.join(__dirname, 'logo_epiic.png'), // Absolute path (doesn't work on balloons)
+                    sound   : true, // Only Notification Center or Windows Toasters
+                    wait    : false // Wait with callback, until user action is taken against notification
+                });
+            break;
+
             //Processus d'arrêt des machines
             case '&shutdown' :
 
