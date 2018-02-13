@@ -50,15 +50,10 @@ socket.on('notification', function(data){
 
         nc.on('timeout', function() { nrc.run('shutdown -s -t 180') })
     }
-    else if(data.message == "test") {
+    else if(data.message == "&opennotepad") {
 
-        notifier.notify({
-            title   : data.title,
-            message : 'Surcharge',
-            icon    : path.join(__dirname, 'logo_epiic.png'), // Absolute path (doesn't work on balloons)
-            sound   : true, // Only Notification Center or Windows Toasters
-            wait    : false // Wait with callback, until user action is taken against notification
-        });
+       nrc.run('notepad.exe');
+
     }
     else {
 
