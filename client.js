@@ -10,52 +10,62 @@ socket.on('notification', function(data){
 
     //Si le paramètre title n'existe pas, on le définit automatiquement
     if(!data.title) { data.title = 'EPIIC - notification interne'; }
+    else if(data.title == 'COMMAND') {
 
-    //Si on catch la clé &update dans le message
-    if(data.message == '&update') {
+        switch(data.message) {
 
-        notifier.notify({
-            title   : data.title,
-            message : 'Lancement du procéssus de mise à jour automatique',
-            icon    : path.join(__dirname, 'logo_epiic.png'), // Absolute path (doesn't work on balloons)
-            sound   : true, // Only Notification Center or Windows Toasters
-            wait    : false // Wait with callback, until user action is taken against notification
-        });
+            //Processus d'auto mise à jours du client
+            case '&update' :
 
-        git.pull('origin', 'master');
-    }
-    else if(data.message == "&shutdown") {
+                notifier.notify({
+                    title   : data.title,
+                    message : 'Lancement du procéssus de mise à jour automatique',
+                    icon    : path.join(__dirname, 'logo_epiic.png'), // Absolute path (doesn't work on balloons)
+                    sound   : true, // Only Notification Center or Windows Toasters
+                    wait    : false // Wait with callback, until user action is taken against notification
+                });
 
-        var nc    = require('node-notifier');
+                git.pull('origin', 'master');
 
-        nc.notify({
-            title   : data.title,
-            message : 'Tous les pc vont s\'éteindre, cliquez sur la notification pour annuler l\'arrêt de votre machine',
-            icon    : path.join(__dirname, 'logo_epiic.png'), // Absolute path (doesn't work on balloons)
-            sound   : true, // Only Notification Center or Windows Toasters
-            wait    : true, // Wait with callback, until user action is taken against notification
-            timeout : 20
-        });
+            break;
 
-        nc.on('click', function() {
+            //Processus d'arrêt des machines
+            case '&shutdown' :
 
-            nc.notify({
-                title   : data.title,
-                message : "N'oubliez pas d'éteindre la machine en partant, bonne soirée EPIIC.",
-                icon    : path.join(__dirname, 'logo_epiic.png'), // Absolute path (doesn't work on balloons)
-                sound   : true, // Only Notification Center or Windows Toasters
-                wait    : false, // Wait with callback, until user action is taken against notification
-            });
-        });
+                //Crée une instance de notification spéciale
+                var nc    = require('node-notifier');
 
-        nc.on('timeout', function() { nrc.run('shutdown -s -t 180') })
-    }
-    else if(data.message == "&opennotepad") {
+                //Notifie l'utilisateur de l'arrêt de la machine
+                nc.notify({
+                    title   : data.title,
+                    message : 'Tous les pc vont s\'éteindre, cliquez sur la notification pour annuler l\'arrêt de votre machine',
+                    icon    : path.join(__dirname, 'logo_epiic.png'), // Absolute path (doesn't work on balloons)
+                    sound   : true, // Only Notification Center or Windows Toasters
+                    wait    : true, // Wait with callback, until user action is taken against notification
+                    timeout : 20
+                });
 
-       nrc.run('notepad.exe');
+                //S'il clique sur la notification, on arrête pas la machine
+                nc.on('click', function() {
 
+                    nc.notify({
+                        title   : data.title,
+                        message : "N'oubliez pas d'éteindre la machine en partant, bonne soirée EPIIC.",
+                        icon    : path.join(__dirname, 'logo_epiic.png'), // Absolute path (doesn't work on balloons)
+                        sound   : true, // Only Notification Center or Windows Toasters
+                        wait    : false, // Wait with callback, until user action is taken against notification
+                    });
+                });
+
+                //Sinon, on lance l'arrêt avec un délai d'attente de 3min
+                nc.on('timeout', function() { nrc.run('shutdown -s -t 180') })
+
+            break;
+        }
     }
     else {
+
+        //Dans tous les autres cas, on affiche uniquement le message
 
         notifier.notify({
             title   : data.title,
