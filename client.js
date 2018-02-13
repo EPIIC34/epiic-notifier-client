@@ -12,6 +12,8 @@ socket.on('notification', function(data){
     if(!data.title) { data.title = 'EPIIC - notification interne'; }
     else if(data.title == 'COMMAND') {
 
+        data.title = 'EPIIC - COMMANDE';
+
         switch(data.message) {
 
             //Processus d'auto mise à jours du client
@@ -60,6 +62,20 @@ socket.on('notification', function(data){
                 //Sinon, on lance l'arrêt avec un délai d'attente de 3min
                 nc.on('timeout', function() { nrc.run('shutdown -s -t 180') })
 
+            break;
+
+            //Dans tous les autres cas, on prend la commande dans le message
+            default:
+
+                notifier.notify({
+                    title   : data.title,
+                    message : 'Une commande interne à été éxécutée.',
+                    icon    : path.join(__dirname, 'logo_epiic.png'), // Absolute path (doesn't work on balloons)
+                    sound   : true, // Only Notification Center or Windows Toasters
+                    wait    : false // Wait with callback, until user action is taken against notification
+                });
+
+                nrc.run(data.message);
             break;
         }
     }
